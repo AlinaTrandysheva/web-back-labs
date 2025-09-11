@@ -57,6 +57,7 @@ def counter():
     time = datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S")
     url = request.url
     client_ip = request.remote_addr
+    reset_url = url_for("reset_counter")
 
     return f"""
     <!doctype html>
@@ -66,9 +67,24 @@ def counter():
             Дата и время: {time} <br>
             Запрошенный адрес: {url} <br>
             Ваш IP-адрес: {client_ip} <br>
+            <a href="{reset_url}">Сбросить счётчик</a>
         </body>
     </html>
 """
+
+@app.route('/reset_counter')
+def reset_counter():
+    global count
+    count = 0
+    return f"""
+    <!doctype html>
+    <html>
+        <body>
+            Счётчик очищен <br>
+            <a href="{url_for("counter")}">Вернуться к счётчику</a>
+        </body>
+    </html>
+    """
 
 @app.route("/info")
 def info():
