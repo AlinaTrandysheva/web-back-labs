@@ -134,10 +134,90 @@ def lab1():
     </head>
     <body>
         <p>Flask — фреймворк для создания веб-приложений на языке
-программирования Python, использующий набор инструментов
-Werkzeug, а также шаблонизатор Jinja2. Относится к категории так
-называемых микрофреймворков — минималистичных каркасов
-веб-приложений, сознательно предоставляющих лишь самые базовые возможности.</p>
+        программирования Python, использующий набор инструментов
+        Werkzeug, а также шаблонизатор Jinja2. Относится к категории так
+        называемых микрофреймворков — минималистичных каркасов
+        веб-приложений, сознательно предоставляющих лишь самые базовые возможности.</p>
         <a href="/">Корень сайта</a>
     </body>
 </html>'''
+
+
+@app.route("/400")
+def bad_request():
+    return '''<!doctype html>
+<html>
+    <head>
+        <title>400 Bad Request</title>
+    </head>
+    <body>
+        <h1>400 Bad Request</h1>
+        <p>Сервер не может обработать запрос из-за неверного синтаксиса</p>
+    </body>
+</html>''', 400
+
+@app.route("/401")
+def unauthorized():
+    return '''<!doctype html>
+<html>
+    <head>
+        <title>401 Unauthorized</title>
+    </head>
+    <body>
+        <h1>401 Unauthorized</h1>
+        <p>Требуется аутентификация для доступа к ресурсу</p>
+    </body>
+</html>''', 401
+
+@app.route("/402")
+def payment_required():
+    return '''<!doctype html>
+<html>
+    <head>
+        <title>402 Payment Required</title>
+    </head>
+    <body>
+        <h1>402 Payment Required</h1>
+        <p>Требуется оплата для доступа к ресурсу</p>
+    </body>
+</html>''', 402
+
+@app.route("/403")
+def forbidden():
+    return '''<!doctype html>
+<html>
+    <head>
+        <title>403 Forbidden</title>
+    </head>
+    <body>
+        <h1>403 Forbidden</h1>
+        <p>Доступ к ресурсу запрещен</p>
+    </body>
+</html>''', 403
+
+@app.route("/405")
+def method_not_allowed():
+    return '''<!doctype html>
+<html>
+    <head>
+        <title>405 Method Not Allowed</title>
+    </head>
+    <body>
+        <h1>405 Method Not Allowed</h1>
+        <p>Метод не разрешен для данного ресурса</p>
+    </body>
+</html>''', 405
+
+@app.route("/418")
+def teapot():
+    return '''<!doctype html>
+<html>
+    <head>
+        <title>418 I'm a teapot</title>
+    </head>
+    <body>
+        <h1>418 I'm a teapot</h1>
+        <p>Я чайник и не могу заваривать кофе</p>
+    </body>
+</html>''', 418
+
