@@ -228,41 +228,6 @@ def teapot():
 </html>''', 418
 
 
-@app.route("/404")
-def not_found():
-    image_path = url_for("static", filename="ошибка.webp")
-    return f'''<!doctype html>
-<html>
-    <head>
-        <title>404 Not Found</title>
-        <style>
-            body {{
-                background: pink;
-                color: #333;
-                font-family: Arial;
-                text-align: center;
-                padding: 50px;
-            }}
-            h1 {{
-                color: #dc3545;
-                font-size: 50px;
-            }}
-            img {{
-                width: 200px;
-                margin: 20px;
-            }}
-            a {{
-                color: #007bff;
-            }}
-        </style>
-    </head>
-    <body>
-        <h1>404</h1>
-        <p>Страница не найдена</p>
-        <img src="{image_path}" alt="Not found">
-        <p><a href="/">На главную</a></p>
-    </body>
-</html>''', 404
 
 @app.route("/server_error")
 def server_error():
@@ -305,3 +270,61 @@ def image():
         'X-Image-Filename': 'dog.jpg',
         'Content-Type': 'text/html; charset=utf-8'
     }
+
+
+
+not_found_log = []
+
+@app.route("/404")
+def not_found():
+    client_ip = request.remote_addr
+    access_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    requested_url = request.url
+    
+    log_entry = f"{access_time} - {client_ip} - {requested_url}"
+    not_found_log.append(log_entry)
+    
+    image_path = url_for("static", filename="ошибка.webp")
+    
+    log_html = "<h3>Журнал:</h3>"
+    for entry in not_found_log[-5:]:  
+        log_html += f"<p>{entry}</p>"
+    
+    return f'''<!doctype html>
+<html>
+    <head>
+        <title>404 Not Found</title>
+        <style>
+            body {{
+                background: pink;
+                color: #333;
+                font-family: Arial;
+                text-align: center;
+                padding: 50px;
+            }}
+            h1 {{
+                color: #dc3545;
+                font-size: 50px;
+            }}
+            img {{
+                width: 200px;
+                margin: 20px;
+            }}
+            a {{
+                color: #007bff;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>404</h1>
+        <p>Страница не найдена</p>
+        <p><strong>Ваш IP:</strong> {client_ip}</p>
+        <p><strong>Время доступа:</strong> {access_time}</p>
+        <img src="{image_path}" alt="Not found">
+        <p><a href="/">Вернуться на главную страницу</a></p>
+        
+        {log_html}
+        
+        <p><small>Всего обращений: {len(not_found_log)}</small></p>
+    </body>
+</html>''', 404
