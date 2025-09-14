@@ -221,3 +221,40 @@ def teapot():
     </body>
 </html>''', 418
 
+
+@app.route("/404")
+def not_found():
+    image_path = url_for("static", filename="ошибка.webp")
+    return f'''<!doctype html>
+<html>
+    <head>
+        <title>404 Not Found</title>
+        <style>
+            body {{
+                background: pink;
+                color: #333;
+                font-family: Arial;
+                text-align: center;
+                padding: 50px;
+            }}
+            h1 {{
+                color: #dc3545;
+                font-size: 50px;
+            }}
+            img {{
+                width: 200px;
+                margin: 20px;
+            }}
+            a {{
+                color: #007bff;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>404</h1>
+        <p>Страница не найдена</p>
+        <img src="{image_path}" alt="Not found">
+        <p><a href="/">На главную</a></p>
+    </body>
+</html>''', 404
+
