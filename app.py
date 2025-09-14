@@ -124,6 +124,27 @@ def lab1():
         называемых микрофреймворков — минималистичных каркасов
         веб-приложений, сознательно предоставляющих лишь самые базовые возможности.</p>
         <a href="/">Корень сайта</a>
+         <h2>Список роутов</h2>
+        <ul>
+            <li><a href="/">Главная страница</a></li>
+            <li><a href="/index">Index</a></li>
+            <li><a href="/lab1/web">Web</a></li>
+            <li><a href="/lab1/author">Author</a></li>
+            <li><a href="/lab1/counter">Counter</a></li>
+            <li><a href="/lab1/info">Info</a></li>
+            <li><a href="/created">Created</a></li>
+            <li><a href="/image">Image</a></li>
+            <li><a href="/400">400 Bad Request</a></li>
+            <li><a href="/401">401 Unauthorized</a></li>
+            <li><a href="/402">402 Payment Required</a></li>
+            <li><a href="/403">403 Forbidden</a></li>
+            <li><a href="/404">404 Not Found</a></li>
+            <li><a href="/405">405 Method Not Allowed</a></li>
+            <li><a href="/418">418 I'm a teapot</a></li>
+            <li><a href="/server_error">Server Error (500)</a></li>
+        </ul>
+        
+        <a href="/">Корень сайта</a>
     </body>
 </html>'''
 
