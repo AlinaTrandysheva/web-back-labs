@@ -31,22 +31,7 @@ def author():
             </body>
         </html>"""
 
-@app.route('/image')
-def image():
-    path = url_for("static", filename="dog.jpg")
-    css_path = url_for("static", filename="lab1.css")
-    return f'''
-<!doctype html>
-<html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="{css_path}">
-    </head>
-    <body>
-        <h1>Шпиц</h1>
-        <img src="{path}">
-    </body>
-</html>
-'''
+
 
 count = 0
 
@@ -277,3 +262,25 @@ def internal_server_error(error):
     </body>
 </html>''', 500
 
+@app.route('/image')
+def image():
+    path = url_for("static", filename="dog.jpg")
+    css_path = url_for("static", filename="lab1.css")
+    html_content = f'''
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{css_path}">
+    </head>
+    <body>
+        <h1>Шпиц</h1>
+        <img src="{path}">
+    </body>
+</html>
+'''
+    return html_content, 200, {
+        'Content-Language': 'ru',
+        'X-Custom-App': 'Flask-Image-Server',
+        'X-Image-Filename': 'dog.jpg',
+        'Content-Type': 'text/html; charset=utf-8'
+    }
