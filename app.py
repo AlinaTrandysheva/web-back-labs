@@ -103,3 +103,24 @@ def created():
 </html>
 ''',201
 
+
+@app.route("/")
+@app.route("/index")
+def index():
+    return '''<!doctype html> 
+<html>
+    <head>
+        <title>НГТУ, ФБ, Лабораторные работы</title>
+    </head>
+    <body>
+        <h1>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных</h1>
+        <nav>
+            <ul>
+                <li><a href="/lab1">Первая лабораторная</a></li>
+            </ul>
+        </nav>
+        <footer>
+            <p>Трандышева Алина Константиновна, ФБИ-34, 3 курс, 2025</p>
+        </footer>
+    </body>
+</html>'''
