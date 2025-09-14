@@ -258,3 +258,22 @@ def not_found():
     </body>
 </html>''', 404
 
+@app.route("/server_error")
+def server_error():
+    result = 10 / 0
+    return "Эта строка никогда не будет выполнена"
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return '''<!doctype html>
+<html>
+    <head>
+        <title>500 Internal Server Error</title>
+    </head>
+    <body>
+        <h1>500 - Ошибка сервера</h1>
+        <p>На сервере произошла внутренняя ошибка</p>
+        <p><a href="/">Вернуться на главную страницу</a></p>
+    </body>
+</html>''', 500
+
