@@ -328,3 +328,9 @@ def not_found():
         <p><small>Всего обращений: {len(not_found_log)}</small></p>
     </body>
 </html>''', 404
+
+
+@app.route('/lab2/a/')
+def a():
+    return 'ok'
+
