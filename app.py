@@ -363,9 +363,10 @@ def add_flower(name):
 def example():
     name = 'Алина'
     group = 'ФБИ-34'
-    kyrs = '3'
-    nomer = '2'
-    return render_template('example.html', name=name, group=group, kyrs=kyrs, nomer=nomer)
+    kyrs = '3 курс'
+    lab_num = '2'
+    return render_template('example.html', name=name, group=group, kyrs=kyrs, lab_num=lab_num)
 
-    
-
+@app.route('/lab2/examplebez')
+def examplebez():
+    return render_template('example.html')
