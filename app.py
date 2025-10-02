@@ -518,3 +518,7 @@ berries = [
 @app.route('/lab2/berries')
 def show_berries():
     return render_template('berries.html', items=berries)
+
+
+from flask import send_from_directory
+
