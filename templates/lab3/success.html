@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+<style>
+    .success-card {max-width: 520px; margin: 16px 0; padding: 16px; border: 1px solid #eee; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.05); text-align:center}
+    .success-card h1 {margin-top: 0}
+    .sum {font-size: 1.2rem; font-weight: 700; margin: 8px 0}
+    .link {display:inline-block; margin-top: 12px; text-decoration: none; color: #4f46e5}
+</style>
+
+<div class="success-card">
+    <h1>Спасибо!</h1>
+    <div>Ваш заказ оплачен на сумму</div>
+    <div class="sum">{{ price }} ₽</div>
+    <div>Ожидайте доставку.</div>
+    <a class="link" href="/lab3/order">← Вернуться к заказу</a>
+</div>
+{% endblock %}
