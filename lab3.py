@@ -96,3 +96,75 @@ def settings():
         fontstyle=fontstyle
     ))
     return resp
+
+@lab3.route('/lab3/ticket', methods=['GET', 'POST'])
+def ticket():
+    if request.method == 'GET':
+        return render_template('lab3/ticket_form.html', form={}, errors={})
+
+    form = {
+        'fio': (request.form.get('fio') or '').strip(),
+        'berth': (request.form.get('berth') or '').strip(),
+        'linen': request.form.get('linen') == 'on',
+        'baggage': request.form.get('baggage') == 'on',
+        'age': (request.form.get('age') or '').strip(),
+        'from_city': (request.form.get('from_city') or '').strip(),
+        'to_city': (request.form.get('to_city') or '').strip(),
+        'date': (request.form.get('date') or '').strip(),
+        'insurance': request.form.get('insurance') == 'on',
+    }
+
+    errors = {}
+
+    if not form['fio']:
+        errors['fio'] = 'Укажите ФИО'
+    if not form['berth']:
+        errors['berth'] = 'Выберите полку'
+    if not form['from_city']:
+        errors['from_city'] = 'Укажите пункт выезда'
+    if not form['to_city']:
+        errors['to_city'] = 'Укажите пункт назначения'
+    if not form['date']:
+        errors['date'] = 'Укажите дату поездки'
+
+    try:
+        age_int = int(form['age'])
+        if not (1 <= age_int <= 120):
+            errors['age'] = 'Возраст должен быть от 1 до 120'
+    except ValueError:
+        errors['age'] = 'Возраст должен быть числом'
+
+    valid_berths = {
+        'нижняя', 'верхняя', 'верхняя боковая', 'нижняя боковая'
+    }
+    if form['berth'] and form['berth'] not in valid_berths:
+        errors['berth'] = 'Недопустимое значение полки'
+
+    if errors:
+        return render_template('lab3/ticket_form.html', form=form, errors=errors), 400
+
+    is_child = age_int < 18
+    price = 700 if is_child else 1000
+    if form['berth'] in ('нижняя', 'нижняя боковая'):
+        price += 100
+    if form['linen']:
+        price += 75
+    if form['baggage']:
+        price += 250
+    if form['insurance']:
+        price += 150
+
+    return render_template(
+        'lab3/ticket_result.html',
+        fio=form['fio'],
+        berth=form['berth'],
+        linen=form['linen'],
+        baggage=form['baggage'],
+        age=age_int,
+        from_city=form['from_city'],
+        to_city=form['to_city'],
+        date=form['date'],
+        insurance=form['insurance'],
+        is_child=is_child,
+        price=price
+    )

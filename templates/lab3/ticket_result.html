@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block lab %}Лабораторная работа 3 — Билет{% endblock %}
+{% block main %}
+<h1>Билет оформлен</h1>
+
+<p><strong>{{ is_child and 'Детский билет' or 'Взрослый билет' }}</strong></p>
+
+<ul>
+  <li>Пассажир: {{ fio }} ({{ age }} лет)</li>
+  <li>Маршрут: {{ from_city }} → {{ to_city }}</li>
+  <li>Дата поездки: {{ date }}</li>
+  <li>Полка: {{ berth }}</li>
+  <li>С бельём: {{ 'да' if linen else 'нет' }}</li>
+  <li>С багажом: {{ 'да' if baggage else 'нет' }}</li>
+  <li>Страховка: {{ 'да' if insurance else 'нет' }}</li>
+</ul>
+
+<p style="font-size:20px"><strong>Итого к оплате: {{ price }} ₽</strong></p>
+
+<p><a href="{{ url_for('lab3.ticket') }}">Оформить ещё один билет</a></p>
+{% endblock %}

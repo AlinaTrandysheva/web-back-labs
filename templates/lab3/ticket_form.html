@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block lab %}Лабораторная работа 3 — Билет{% endblock %}
+{% block main %}
+<h1>Железнодорожный билет</h1>
+
+<form method="post" action="{{ url_for('lab3.ticket') }}" style="max-width: 560px; display:grid; gap:12px">
+  <label>
+    ФИО пассажира
+    <input type="text" name="fio" value="{{ form.fio or '' }}" required>
+    {% if errors.fio %}<div style="color:#c00">{{ errors.fio }}</div>{% endif %}
+  </label>
+
+  <label>
+    Полка
+    <select name="berth" required>
+      <option value="" disabled {{ '' == (form.berth or '') and 'selected' or '' }}>— выберите —</option>
+      {% for v in ['нижняя','верхняя','верхняя боковая','нижняя боковая'] %}
+        <option value="{{ v }}" {{ (form.berth==v) and 'selected' or '' }}>{{ v }}</option>
+      {% endfor %}
+    </select>
+    {% if errors.berth %}<div style="color:#c00">{{ errors.berth }}</div>{% endif %}
+  </label>
+
+  <label>
+    Возраст
+    <input type="number" name="age" min="1" max="120" value="{{ form.age or '' }}" required>
+    {% if errors.age %}<div style="color:#c00">{{ errors.age }}</div>{% endif %}
+  </label>
+
+  <label>
+    Пункт выезда
+    <input type="text" name="from_city" value="{{ form.from_city or '' }}" required>
+    {% if errors.from_city %}<div style="color:#c00">{{ errors.from_city }}</div>{% endif %}
+  </label>
+
+  <label>
+    Пункт назначения
+    <input type="text" name="to_city" value="{{ form.to_city or '' }}" required>
+    {% if errors.to_city %}<div style="color:#c00">{{ errors.to_city }}</div>{% endif %}
+  </label>
+
+  <label>
+    Дата поездки
+    <input type="date" name="date" value="{{ form.date or '' }}" required>
+    {% if errors.date %}<div style="color:#c00">{{ errors.date }}</div>{% endif %}
+  </label>
+
+  <label><input type="checkbox" name="linen" {{ form.linen and 'checked' or '' }}> С бельём</label>
+  <label><input type="checkbox" name="baggage" {{ form.baggage and 'checked' or '' }}> Едет с багажом</label>
+  <label><input type="checkbox" name="insurance" {{ form.insurance and 'checked' or '' }}> Нужна страховка</label>
+
+  <button type="submit">Оформить билет</button>
+</form>
+{% endblock %}
