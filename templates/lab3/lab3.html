@@ -5,11 +5,16 @@
   <div>
     Привет, <span style="color: {{name_color}}">{{ name }}</span>!
   </div>
+  <div>
+    Твой возраст: {{ age }}   
+  </div>
   <div>Список сделанных страниц:</div>
   <ol>
     <li><a href="{{ url_for('lab3.cookie') }}">Куки</a></li>
     <li><a href="{{ url_for('lab3.del_cookie') }}">Удалить куки</a></li>
     <li><a href="{{ url_for('lab3.form1') }}">Форма 1</a></li>
+    <li><a href="{{ url_for('lab3.order') }}">Заказ напитка</a></li>
+    <li><a href="{{ url_for('lab3.settings') }}">Цвет текста</a></li>
   </ol>
 {% endblock %}
 
