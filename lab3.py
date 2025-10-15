@@ -179,3 +179,99 @@ def clear_settings():
     resp.delete_cookie('fontstyle')
     return resp
 
+
+iphones = [
+    {"name": "iPhone 8 64GB", "price": 12000, "storage": "64GB", "color": "Silver"},
+    {"name": "iPhone 8 128GB", "price": 15000, "storage": "128GB", "color": "Space Gray"},
+    {"name": "iPhone X 64GB", "price": 18000, "storage": "64GB", "color": "Silver"},
+    {"name": "iPhone XR 64GB", "price": 20000, "storage": "64GB", "color": "Blue"},
+    {"name": "iPhone XS 256GB", "price": 26000, "storage": "256GB", "color": "Gold"},
+    {"name": "iPhone 11 64GB", "price": 27000, "storage": "64GB", "color": "Black"},
+    {"name": "iPhone 11 128GB", "price": 30000, "storage": "128GB", "color": "Green"},
+    {"name": "iPhone 12 mini 64GB", "price": 32000, "storage": "64GB", "color": "White"},
+    {"name": "iPhone 12 128GB", "price": 38000, "storage": "128GB", "color": "Blue"},
+    {"name": "iPhone 12 Pro 256GB", "price": 52000, "storage": "256GB", "color": "Pacific Blue"},
+    {"name": "iPhone 13 mini 128GB", "price": 42000, "storage": "128GB", "color": "Pink"},
+    {"name": "iPhone 13 128GB", "price": 47000, "storage": "128GB", "color": "Midnight"},
+    {"name": "iPhone 13 256GB", "price": 52000, "storage": "256GB", "color": "Blue"},
+    {"name": "iPhone 14 128GB", "price": 62000, "storage": "128GB", "color": "Purple"},
+    {"name": "iPhone 14 Plus 128GB", "price": 69000, "storage": "128GB", "color": "Blue"},
+    {"name": "iPhone 14 Pro 256GB", "price": 98000, "storage": "256GB", "color": "Space Black"},
+    {"name": "iPhone 15 128GB", "price": 78000, "storage": "128GB", "color": "Blue"},
+    {"name": "iPhone 15 Plus 128GB", "price": 85000, "storage": "128GB", "color": "Yellow"},
+    {"name": "iPhone 15 Pro 256GB", "price": 119000, "storage": "256GB", "color": "Natural Titanium"},
+    {"name": "iPhone 15 Pro Max 256GB", "price": 135000, "storage": "256GB", "color": "White Titanium"},
+]
+
+@lab3.route('/lab3/phones', methods=['GET', 'POST'])
+def phones_view():
+    min_all = min(p['price'] for p in iphones)
+    max_all = max(p['price'] for p in iphones)
+
+    if request.method == 'POST' and request.form.get('action') == 'reset':
+        resp = make_response(redirect(url_for('lab3.phones_view')))
+        resp.delete_cookie('price_min')
+        resp.delete_cookie('price_max')
+        return resp
+
+    min_raw = (request.form.get('min') if request.method == 'POST' else request.args.get('min')) or ''
+    max_raw = (request.form.get('max') if request.method == 'POST' else request.args.get('max')) or ''
+
+    if not min_raw and not max_raw:
+        min_raw = request.cookies.get('price_min') or ''
+        max_raw = request.cookies.get('price_max') or ''
+
+    price_min = None
+    price_max = None
+
+    if min_raw.strip():
+        try:
+            price_min = int(min_raw)
+        except ValueError:
+            price_min = None
+    if max_raw.strip():
+        try:
+            price_max = int(max_raw)
+        except ValueError:
+            price_max = None
+
+    if price_min is not None and price_max is not None and price_min > price_max:
+        price_min, price_max = price_max, price_min
+
+    filtered = []
+    for p in iphones:
+        if price_min is not None and p['price'] < price_min:
+            continue
+        if price_max is not None and p['price'] > price_max:
+            continue
+        filtered.append(p)
+
+    if request.method == 'POST' and request.form.get('action') == 'search':
+        resp = make_response(render_template(
+            'lab3/phones.html',
+            items=filtered,
+            count=len(filtered),
+            min_all=min_all,
+            max_all=max_all,
+            value_min='' if price_min is None else price_min,
+            value_max='' if price_max is None else price_max
+        ))
+        if price_min is None:
+            resp.delete_cookie('price_min')
+        else:
+            resp.set_cookie('price_min', str(price_min))
+        if price_max is None:
+            resp.delete_cookie('price_max')
+        else:
+            resp.set_cookie('price_max', str(price_max))
+        return resp
+
+    return render_template(
+        'lab3/phones.html',
+        items=filtered if (price_min is not None or price_max is not None) else iphones,
+        count=len(filtered) if (price_min is not None or price_max is not None) else len(iphones),
+        min_all=min_all,
+        max_all=max_all,
+        value_min='' if price_min is None else price_min,
+        value_max='' if price_max is None else price_max
+    )

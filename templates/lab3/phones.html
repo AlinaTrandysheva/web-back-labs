@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block lab %}Лабораторная работа 3 — Поиск iPhone по цене{% endblock %}
+
+{% block main %}
+<h1>Каталог iPhone</h1>
+
+<form method="post" action="{{ url_for('lab3.phones_view') }}" style="display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; margin-bottom:16px">
+  <label>Мин. цена
+    <input type="number" name="min" placeholder="{{ min_all }}" value="{{ value_min }}">
+  </label>
+  <label>Макс. цена
+    <input type="number" name="max" placeholder="{{ max_all }}" value="{{ value_max }}">
+  </label>
+
+  <button type="submit" name="action" value="search">Искать</button>
+  <button type="submit" name="action" value="reset">Сброс</button>
+</form>
+
+<p>Найдено: {{ count }}</p>
+
+{% if count == 0 %}
+  <p>Не найдено ни одного товара.</p>
+{% else %}
+  <div style="display:grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap:12px">
+    {% for it in items %}
+      <div style="border:1px solid #ddd; border-radius:12px; padding:12px">
+        <div style="font-weight:700">{{ it.name }}</div>
+        <div>Память: {{ it.storage }}</div>
+        <div>Цвет: {{ it.color }}</div>
+        <div style="margin-top:6px; font-size:18px">{{ it.price }} ₽</div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+{% endblock %}
