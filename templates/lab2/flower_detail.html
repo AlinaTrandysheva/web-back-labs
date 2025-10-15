@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block lab %}Лабораторная 2 — Цветы{% endblock %}
+
+{% block main %}
+  <h1>Информация о цветке</h1>
+  <p><b>ID:</b> {{ flower_id }}</p>
+  <p><b>Название:</b> {{ name }}</p>
+  <p><b>Цена:</b> {{ price }} руб</p>
+  <p><a href="{{ url_for('lab2.list_flowers') }}">Посмотреть все цветы</a></p>
+{% endblock %}

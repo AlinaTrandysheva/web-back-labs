@@ -1,6 +1,6 @@
 from flask import Blueprint, url_for, request, redirect, abort, render_template
 import datetime
-lab2 = Blueprint('lab2', __name__)
+lab2 = Blueprint('lab2', __name__, url_prefix='/lab2')
 
 @lab2.route('/lab2/a/')
 def a():
@@ -13,19 +13,19 @@ flower_list = [
     {'name': 'ромашка',   'price': 330},
 ]
 
-@lab2.route('/lab2/flowers')
+@lab2.route('/flowers')
 def list_flowers():
-    return render_template('flower_list.html', flower_list=flower_list)
+    return render_template('lab2/flower_list.html', flower_list=flower_list) 
 
-@lab2.route('/lab2/flowers/<int:flower_id>')
+@lab2.route('/flowers/<int:flower_id>')
 def flowers(flower_id):
-    if flower_id < 0 or flower_id >= len(flower_list):
+    if not (0 <= flower_id < len(flower_list)):
         abort(404)
     f = flower_list[flower_id]
-    return render_template('flower_detail.html',
+    return render_template('lab2/flower_detail.html',
                            flower_id=flower_id, name=f['name'], price=f['price'])
 
-@lab2.route('/lab2/del_flower/<int:flower_id>')
+@lab2.route('/del_flower/<int:flower_id>')
 def del_flower(flower_id):
     if flower_id < 0 or flower_id >= len(flower_list):
         abort(404)
@@ -33,23 +33,23 @@ def del_flower(flower_id):
     return redirect(url_for('lab2.list_flowers'))
 
 
-@lab2.route('/lab2/flowers/clear')
+@lab2.route('/flowers/clear')
 def clear_flowers():
     flower_list.clear()
     return redirect(url_for('lab2.list_flowers'))
 
-@lab2.route('/lab2/add_flower/<name>')
+@lab2.route('/add_flower/<name>')
 def add_flower(name):
     default_price = 300 + (len(flower_list) % 10) * 10
     flower_list.append({'name': name, 'price': default_price})
     return redirect(url_for('lab2.list_flowers'))
 
-@lab2.route('/lab2/add_flower/')
+@lab2.route('/add_flower/')
 def add_flower_missing():
-    return render_template('flower_missing_400.html'), 400
+    return render_template('lab2/flower_missing_400.html'), 400
 
 
-@lab2.route('/lab2/example')
+@lab2.route('/example')
 def example():
     name, lab_num, group, course = 'Алина Трандышева', 2, 'ФБИ-34', 3
     fruits = [
@@ -59,27 +59,27 @@ def example():
         {'name': 'мандарины', 'price': 95},
         {'name': 'манго', 'price': 321}
     ]
-    return render_template('example.html',
+    return render_template('lab2/example.html',
                            name=name, lab_num=lab_num, group=group,
                            course=course, fruits=fruits)
 
-@lab2.route('/lab2/examplebez')
+@lab2.route('/examplebez')
 def examplebez():
-    return render_template('example.html')
+    return render_template('lab2/example.html')
 
 
-@lab2.route('/lab2/')
+@lab2.route('/')
 def lab():
-    return render_template('lab2.html')
+    return render_template('lab2/lab2.html')
 
 
-@lab2.route('/lab2/filters')
+@lab2.route('/filters')
 def filters():
     phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
-    return render_template('filter.html', phrase=phrase)
+    return render_template('lab2/filter.html', phrase=phrase)
 
 
-@lab2.route('/lab2/calc/<int:a>/<int:b>')
+@lab2.route('/calc/<int:a>/<int:b>')
 def calc(a, b):
     return f'''
 <!doctype html>
@@ -98,14 +98,14 @@ def calc(a, b):
 '''
 
 
-@lab2.route('/lab2/calc/')
+@lab2.route('/calc/')
 def calc_default():
-    return redirect('/lab2/calc/1/1')
+    return redirect(url_for('lab2.calc', a=1, b=1)) 
 
 
-@lab2.route('/lab2/calc/<int:a>')
+@lab2.route('/calc/<int:a>')
 def calc_one_arg(a):
-    return redirect(f'/lab2/calc/{a}/1')
+    return redirect(url_for('lab2.calc', a=a, b=1))
 
 
 books = [
@@ -121,9 +121,9 @@ books = [
     {"title": "Доктор Живаго", "author": "Борис Пастернак", "genre": "Роман", "pages": 867}
 ]
 
-@lab2.route('/lab2/books')
+@lab2.route('/books')
 def show_books():
-    return render_template('books.html', books=books)
+    return render_template('lab2/books.html', books=books)
 
 
 berries = [
@@ -151,9 +151,9 @@ berries = [
     {"name": "Арбуз", "desc": "Сладкая сочная летняя ягода", "img": "berries/арбуз.webp"},
 ]
 
-@lab2.route('/lab2/berries')
+@lab2.route('/berries')
 def show_berries():
-    return render_template('berries.html', items=berries)
+    return render_template('lab2/berries.html', items=berries)
 
 
 from flask import send_from_directory

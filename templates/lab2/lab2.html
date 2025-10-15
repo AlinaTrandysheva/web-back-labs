@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 2{% endblock %}
+
+{% block main %}
+  <h1>Лабораторная работа 2</h1>
+  <div>Список сделанных страниц:</div>
+
+  <ol>
+    <li><a href="{{ url_for('lab2.list_flowers') }}">/lab2/flowers</a> — список цветов</li>
+    <li><a href="{{ url_for('lab2.add_flower_missing') }}">/lab2/add_flower/</a> — ошибка 400</li>
+    <li><a href="{{ url_for('lab2.flowers', flower_id=0) }}">/lab2/flowers/0</a> — информация о цветке</li>
+    <li><a href="{{ url_for('lab2.clear_flowers') }}">/lab2/flowers/clear</a> — очистить список</li>
+
+    <li><a href="{{ url_for('lab2.example') }}">/lab2/example</a> — фрукты</li>
+    <li><a href="{{ url_for('lab2.examplebez') }}">/lab2/examplebez</a> — выражения</li>
+    <li><a href="{{ url_for('lab2.filters') }}">/lab2/filters</a> — фильтры</li>
+
+    <li><a href="{{ url_for('lab2.calc_default') }}">/lab2/calc/</a> — калькулятор</li>
+
+    <li><a href="{{ url_for('lab2.show_books') }}">/lab2/books</a> — список книг</li>
+    <li><a href="{{ url_for('lab2.show_berries') }}">/lab2/berries</a> — ягоды</li>
+  </ol>
+{% endblock %}

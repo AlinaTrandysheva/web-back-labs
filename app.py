@@ -23,6 +23,7 @@ def index():
             <ul>
                 <li><a href="/lab1">Первая лабораторная</a></li>
                 <li><a href="/lab2">Вторая лабораторная</a></li>
+                <li><a href="/lab3/">Третья лабораторная</a></li>
             </ul>
         </nav>
         <footer>
@@ -146,7 +147,7 @@ def not_found():
     log_entry = f"{access_time} - {client_ip} - {requested_url}"
     not_found_log.append(log_entry)
     
-    image_path = url_for("static", filename="ошибка.webp")
+    image_path = url_for("static", filename="lab1/ошибка.webp")
     
     log_html = "<h3>Журнал:</h3>"
     for entry in not_found_log[-5:]:  

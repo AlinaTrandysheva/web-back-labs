@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block lab %}Лабораторная 2 — Цветы{% endblock %}
+
+{% block main %}
+  <h1>Список цветов</h1>
+
+  <ol>
+    {% for f in flower_list %}
+      <li>
+        {{ f.name }} — {{ f.price }} руб
+        • <a href="{{ url_for('lab2.del_flower', flower_id=loop.index0) }}">удалить</a>
+      </li>
+    {% else %}
+      <li>Список пуст</li>
+    {% endfor %}
+  </ol>
+
+  <p><a href="{{ url_for('lab2.clear_flowers') }}">Удалить все цветы</a></p>
+
+  <h3>Добавить цветок</h3>
+  <input id="newName" type="text" placeholder="название"
+         oninput="updatePreview()" onkeydown="if(event.key==='Enter'){addNow()}">
+  <a id="addLink" href="#" onclick="addNow(); return false;">добавить</a>
+
+  <div style="margin-top:6px; background:#eee; padding:6px;">
+    <code id="preview"></code>
+  </div>
+
+  <script>
+    function buildUrlEncoded(name) {
+      return "{{ url_for('lab2.add_flower', name='__NAME__') }}".replace('__NAME__', encodeURIComponent(name));
+    }
+    function updatePreview() {
+      const name = document.getElementById('newName').value.trim();
+      const urlEncoded = buildUrlEncoded(name || "");
+      const pretty = location.origin + decodeURIComponent(urlEncoded);
+      document.getElementById('preview').textContent = pretty;
+      document.getElementById('addLink').href = name ? urlEncoded : "#";
+    }
+    function addNow() {
+      const name = document.getElementById('newName').value.trim();
+      if (name) location.href = buildUrlEncoded(name);
+    }
+    updatePreview();
+  </script>
+{% endblock %}
