@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 4{% endblock %}
+
+{% block main %}
+<h1>Холодильник</h1>
+
+<form method="post">
+    <label for="temperature">Температура (°C):</label>
+    <input type="number" step="0.1" id="temperature" name="temperature" value="{{ temperature }}">
+    <button type="submit">Установить</button>
+</form>
+
+{% if message %}
+    <p style="margin-top: 15px;">
+        {{ message }}
+    </p>
+
+    {% if snowflakes > 0 %}
+        <p style="font-size: 26px; color: #007bff;">
+            {% for _ in range(snowflakes) %}
+                ❄
+            {% endfor %}
+        </p>
+    {% endif %}
+{% endif %}
+{% endblock %}
