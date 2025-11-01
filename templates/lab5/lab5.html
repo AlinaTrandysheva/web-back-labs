@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+<div style="background:#ffdce6; padding:8px 12px; font-size:14px; color:#b03060;">WEB-программирование, часть 2. Лабораторная работа 5</div>
+
+<h1 style="margin-top:20px; color:#d63384; text-align:center;">База знаний</h1>
+
+<div style="display:flex; gap:12px; background:linear-gradient(90deg, #ffeaf2, #ffd6e8); padding:12px 15px; border-radius:12px; box-shadow:0 3px 8px rgba(255,105,180,0.25); align-items:center;">
+    <a href="/lab5/list" style="background:linear-gradient(145deg, #ffb6c1, #ff8fb8); color:white; padding:8px 16px; border:none; border-radius:20px; text-decoration:none; font-weight:600; box-shadow:0 2px 6px rgba(255,105,180,0.3); transition:0.2s;" onmouseover="this.style.background='#ff6699';" onmouseout="this.style.background='linear-gradient(145deg, #ffb6c1, #ff8fb8)';">Список статей</a>
+
+    <a href="/lab5/create" style="background:linear-gradient(145deg, #ffb6c1, #ff8fb8); color:white; padding:8px 16px; border:none; border-radius:20px; text-decoration:none; font-weight:600; box-shadow:0 2px 6px rgba(255,105,180,0.3); transition:0.2s;" onmouseover="this.style.background='#ff6699';" onmouseout="this.style.background='linear-gradient(145deg, #ffb6c1, #ff8fb8)';">Создать статью</a>
+
+    <a href="/lab5/login" style="background:linear-gradient(145deg, #ffb6c1, #ff8fb8); color:white; padding:8px 16px; border:none; border-radius:20px; text-decoration:none; font-weight:600; box-shadow:0 2px 6px rgba(255,105,180,0.3); transition:0.2s;" onmouseover="this.style.background='#ff6699';" onmouseout="this.style.background='linear-gradient(145deg, #ffb6c1, #ff8fb8)';">Войти</a>
+
+    <a href="/lab5/register" style="background:linear-gradient(145deg, #ffb6c1, #ff8fb8); color:white; padding:8px 16px; border:none; border-radius:20px; text-decoration:none; font-weight:600; box-shadow:0 2px 6px rgba(255,105,180,0.3); transition:0.2s;" onmouseover="this.style.background='#ff6699';" onmouseout="this.style.background='linear-gradient(145deg, #ffb6c1, #ff8fb8)';">Регистрация</a>
+
+    <span style="margin-left:auto; font-weight:bold; color:#b03060; background-color:#fff0f7; padding:6px 14px; border-radius:20px; border:1px solid #ffcce5; box-shadow:0 2px 5px rgba(255,182,193,0.3);">{{ username }}</span>
+</div>
+
+<p style="margin-top:20px; text-align:center; font-size:17px; color:#80264d;">Это главная страница лабораторной №5</p>
+{% endblock %}
