@@ -17,7 +17,15 @@
         border-radius: 20px;
         box-shadow: 0 4px 14px rgba(255,120,160,0.25);
     ">
-        <h2 style="color:#c2185b; margin-top:0;">{{ article['title'] }}</h2>
+        <h2 style="color:#c2185b; margin-top:0;">
+            {{ article['title'] }}
+            {% if article['is_favorite'] %}
+                <span style="color:#d63384; font-weight:bold; margin-left:10px;">
+                    ❤️ любимая статья
+                </span>
+            {% endif %}
+        </h2>
+
         <p style="font-size:16px; line-height:1.5;">{{ article['article_text'] }}</p>
 
         <a href="/lab5/edit/{{ article['id'] }}"

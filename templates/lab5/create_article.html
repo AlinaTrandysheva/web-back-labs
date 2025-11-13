@@ -17,6 +17,19 @@
                    value="{{ title or '' }}">
         </label>
     </div>
+    <div>
+        <label>
+            <input type="checkbox" name="is_favorite">
+            Любимая статья
+        </label>
+    </div>
+
+    <div>
+        <label>
+            <input type="checkbox" name="is_public">
+            Публичная статья 
+        </label>
+    </div>
 
     <div>
         <textarea name="article_text" rows="6" cols="60">{{ article_text or '' }}</textarea>

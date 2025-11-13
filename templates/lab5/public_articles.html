@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+<h1>Публичные статьи</h1>
+
+{% if articles %}
+    {% for a in articles %}
+        <div style="margin-bottom: 20px; border-bottom: 1px solid #ccc;">
+            <h2>
+                {% if a['is_favorite'] %}
+                    ★
+                {% endif %}
+                {{ a['title'] }}
+            </h2>
+
+            <p>
+                Автор:
+                {% if a['full_name'] %}
+                    {{ a['full_name'] }} ({{ a['login'] }})
+                {% else %}
+                    {{ a['login'] }}
+                {% endif %}
+            </p>
+
+            <p>{{ a['article_text'] }}</p>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>Публичных статей пока нет.</p>
+{% endif %}
+{% endblock %}

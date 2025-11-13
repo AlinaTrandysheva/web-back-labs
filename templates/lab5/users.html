@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+<h1>Зарегистрированные пользователи</h1>
+
+{% if users %}
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>Логин</th>
+            <th>Имя</th>
+        </tr>
+        {% for u in users %}
+        <tr>
+            <td>{{ u['login'] }}</td>
+            <td>{{ u['full_name'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>Пока нет ни одного зарегистрированного пользователя.</p>
+{% endif %}
+
+<p style="margin-top:15px;">
+    <a href="/lab5/" class="btn-pink">На главную лабораторной 5</a>
+</p>
+
+<style>
+    .btn-pink {
+        background:linear-gradient(145deg, #ffb6c1, #ff8fb8);
+        color:white;
+        padding:8px 16px;
+        border:none;
+        border-radius:20px;
+        text-decoration:none;
+        font-weight:600;
+        box-shadow:0 2px 6px rgba(255,105,180,0.3);
+        transition:0.2s;
+    }
+    .btn-pink:hover {
+        background:#ff6699 !important;
+    }
+</style>
+{% endblock %}
