@@ -3,7 +3,7 @@
 {% block lab %}Лабораторная работа 5{% endblock %}
 
 {% block main %}
-<h1>Создание статьи</h1>
+<h1>Редактирование статьи</h1>
 
 {% if error %}
     <p style="color:red">{{ error }}</p>
@@ -14,17 +14,17 @@
         <label>
             Название статьи:
             <input type="text" name="title" maxlength="50"
-                   value="{{ title or '' }}">
+                   value="{{ article['title'] }}">
         </label>
     </div>
 
     <div>
-        <textarea name="article_text" rows="6" cols="60">{{ article_text or '' }}</textarea>
+        <textarea name="article_text" rows="6" cols="60">{{ article['article_text'] }}</textarea>
     </div>
 
     <div>
-        <button type="submit">Готово</button>
+        <button type="submit">Сохранить</button>
+        <a href="/lab5/list">Отмена</a>
     </div>
 </form>
 {% endblock %}
-

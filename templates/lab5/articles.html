@@ -4,11 +4,64 @@
 
 {% block main %}
 
-    <h1>Статьи</h1>
+<h1 style="text-align:center; color:#d12b79; margin-bottom:30px;">Ваши статьи</h1>
+
+{% if articles and articles|length > 0 %}
 
     {% for article in articles %}
-        <h2>{{ article['title'] }}</h2>
-        <blockquote>{{ article['article_text'] }}</blockquote>
+    <div style="
+        margin: 25px auto;
+        padding: 20px;
+        width: 90%;
+        background: #ffe6f2;
+        border-radius: 20px;
+        box-shadow: 0 4px 14px rgba(255,120,160,0.25);
+    ">
+        <h2 style="color:#c2185b; margin-top:0;">{{ article['title'] }}</h2>
+        <p style="font-size:16px; line-height:1.5;">{{ article['article_text'] }}</p>
+
+        <a href="/lab5/edit/{{ article['id'] }}"
+           style="
+               display:inline-block;
+               padding:8px 18px;
+               margin-right:10px;
+               background:#ff9ac2;
+               color:white;
+               text-decoration:none;
+               border-radius:20px;
+               box-shadow:0 2px 6px rgba(0,0,0,0.15);
+           ">
+            Редактировать
+        </a>
+
+        <form action="/lab5/delete/{{ article['id'] }}" method="POST" style="display:inline;">
+            <button type="submit"
+                style="
+                    padding:8px 18px;
+                    border:none;
+                    background:#ff4f7d;
+                    color:white;
+                    border-radius:20px;
+                    cursor:pointer;
+                    box-shadow:0 2px 6px rgba(255,0,80,0.3);
+                ">
+                Удалить
+            </button>
+        </form>
+    </div>
     {% endfor %}
+
+{% else %}
+<p style="text-align:center; font-size:18px; color:gray; margin-top:40px;">
+    У вас пока нет статей 
+</p>
+{% endif %}
+
+<div style="text-align:center; margin-top:40px;">
+    <a href="/lab5/"
+       style="text-decoration:none; font-size:18px; color:#c2185b;">
+       На главную
+    </a>
+</div>
 
 {% endblock %}
