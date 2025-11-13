@@ -19,14 +19,14 @@ def register():
     login = request.form.get('login')
     password = request.form.get('password')
 
-    if not login or password:
+    if not login or not password:
         return render_template('lab5/register.html', error='Заполните все поля')
 
     conn, cur = db_connect()
 
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("SELECT login FROM users WHERE login=%s;", (login,))
-    else:  # sqlite
+    else:  
         cur.execute("SELECT login FROM users WHERE login=?;", (login,))
     
     
