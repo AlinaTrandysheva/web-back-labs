@@ -34,6 +34,14 @@
         </nav>
     </header>
 
+    {% if session.get('login') %}
+    <div style="background:#f3f3f3; padding:10px; margin:10px 0; border-radius:8px;">
+        Вы вошли как <b>{{ session.get('login') }}</b>
+        | <a href="/lab5/logout" style="color: #c00;">Выйти</a>
+    </div>
+    {% endif %}
+
+
     <main>
         {% block main %} {% endblock %}
     </main>
