@@ -138,8 +138,14 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 {% endblock %}
 {% block main %}
-    <h1>Список кабинетов</h1>
-    <ul id="office-list"></ul>
-    <h3>Стоимость аренды:</h3>
-    <div id="total-price"></div>
+<div class="office-page">
+    <h1 class="office-title">Список кабинетов</h1>
+
+    <ul id="office-list" class="office-list"></ul>
+
+    <div class="office-total">
+        <h3>Стоимость аренды</h3>
+        <div id="total-price"></div>
+    </div>
+</div>
 {% endblock %}

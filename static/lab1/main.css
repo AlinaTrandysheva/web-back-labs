@@ -24,3 +24,77 @@ footer {
     left: 0;
     right: 0;
 }
+
+.office-page {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 25px 30px;
+    background: #ffe6f1;              
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.office-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 32px;
+    color: #c2185b;                    
+    text-align: center;
+}
+
+.office-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.office-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #ffc1e3;
+    font-size: 15px;
+}
+
+.office-list button {
+    padding: 4px 10px;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.office-list button:first-of-type {
+    background: #ff80ab;
+    color: #fff;
+}
+
+.office-list button:nth-of-type(2) {
+    background: #ffe0f2;
+    color: #ad1457;
+}
+
+.office-list button:hover {
+    opacity: 0.85;
+}
+
+.office-total {
+    margin-top: 20px;
+    padding: 12px 15px;
+    background: #fff0f6;
+    border-radius: 12px;
+    border: 1px solid #ffc1e3;
+    color: #ad1457;
+    font-weight: 600;
+}
+
+.office-total h3 {
+    margin: 0 0 6px;
+    font-size: 18px;
+}
