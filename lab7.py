@@ -58,15 +58,25 @@ def del_film(id):
 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['PUT'])
 def put_film(id):
-    if id < 0 or id >= len(films):
+    if id < 0 or id >= len(films):              
         abort(404)
     film = request.get_json()
+    errors = {}                                  
+    if not film.get('description'):              
+        errors['description'] = 'Заполните описание' 
+    if errors:                                   
+        return jsonify(errors), 400  
     films[id] = film
     return '', 204
 
 @lab7.route('/lab7/rest-api/films/', methods=['POST'])
 def add_film():
     film = request.get_json()
+    errors = {} 
+    if not film.get('description'):             
+        errors['description'] = 'Заполните описание'  
+    if errors:                                   
+        return jsonify(errors), 400
     films.append(film)
     new_id = len(films) - 1
     return str(new_id), 201
