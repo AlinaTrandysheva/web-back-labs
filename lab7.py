@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template, request, abort, jsonify  # <-- добавили jsonify
-
+from flask import Blueprint, render_template, request, abort, jsonify  
 lab7 = Blueprint('lab7', __name__)
 
 @lab7.route('/lab7/')
@@ -80,3 +79,5 @@ def add_film():
     films.append(film)
     new_id = len(films) - 1
     return str(new_id), 201
+
+
