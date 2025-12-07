@@ -64,7 +64,11 @@ def put_film(id):
     if not film.get('description'):              
         errors['description'] = 'Заполните описание' 
     if errors:                                   
-        return jsonify(errors), 400  
+        return jsonify(errors), 400
+
+    if not film.get('title') or film['title'].strip() == '':
+        film['title'] = film.get('title_ru', '')
+    
     films[id] = film
     return '', 204
 
@@ -76,8 +80,14 @@ def add_film():
         errors['description'] = 'Заполните описание'  
     if errors:                                   
         return jsonify(errors), 400
+    
+    if not film.get('title') or film['title'].strip() == '':
+        film['title'] = film.get('title_ru', '')
+    
     films.append(film)
     new_id = len(films) - 1
     return str(new_id), 201
+    
+
 
 

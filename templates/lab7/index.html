@@ -5,22 +5,69 @@
 {% block script %}
 <script src="{{ url_for('static', filename='lab7/main.js') }}"></script>
 <style>
-.modal{
-    display: none;
-    z-index: 100;
-    box-shadow: 3px 3px 5px black;
-    background: white;
-    width: 400px;
-    left: 50%;
-    top: 220px;
-    margin-left: -200px;
-    position: absolute;
-    padding: 20px;
-}
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
 
-.error-message {
-    color: red;
-}
+    th, td {
+        padding: 10px;
+        border: 1px solid #ccc;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    button {
+        padding: 8px 12px;
+        margin: 5px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #f2f2f2;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        z-index: 1000;
+        width: 400px;
+    }
+
+    .modal input,
+    .modal textarea {
+        width: 100%;
+        padding: 5px;
+        margin: 5px 0 15px 0;
+        box-sizing: border-box;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 12px;
+        margin-top: -10px;
+        margin-bottom: 10px;
+    }
+
+    .original-name {
+        font-style: italic;
+        color: #666;
+        font-size: 0.9em;
+    }
+    
 </style>
 {% endblock %}
 

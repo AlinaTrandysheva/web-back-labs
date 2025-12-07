@@ -1,50 +1,43 @@
 function fillFilmList() {
     fetch('/lab7/rest-api/films/')
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (films) {
-            let tbody = document.getElementById('film-list');
+        .then(response => response.json())
+        .then(films => {
+            const tbody = document.getElementById('film-list');
             tbody.innerHTML = '';
 
-            for (let i = 0; i < films.length; i++) {
-                let tr = document.createElement('tr');
+            films.forEach((film, i) => {
+                const tr = document.createElement('tr');
 
-                let tdTitle = document.createElement('td');
-                let tdTitleRus = document.createElement('td');
-                let tdYear = document.createElement('td');
-                let tdActions = document.createElement('td');
+                const tdTitleRus = document.createElement('td');
+                tdTitleRus.textContent = film.title_ru;
 
-                tdTitle.innerText = films[i].title === films[i].title_ru ? '' : films[i].title;
-                tdTitleRus.innerText = films[i].title_ru;
-                tdYear.innerText = films[i].year;
+                const tdTitle = document.createElement('td');
+                if (film.title) {
+                    const span = document.createElement('span');
+                    span.className = 'original-name';
+                    span.textContent = film.title;
+                    tdTitle.appendChild(span);
+                }
 
-                let editButton = document.createElement('button');
-                editButton.innerText = 'редактировать';
-                editButton.onclick = function () {
-                    editFilm(i);
-                };
+                const tdYear = document.createElement('td');
+                tdYear.textContent = film.year;
 
-                let delButton = document.createElement('button');
-                delButton.innerText = 'удалить';
-                delButton.onclick = function() {
-                    deleteFilm(i, films[i].title_ru);
-                };
+                const tdActions = document.createElement('td');
 
-                tdActions.append(editButton);
-                tdActions.append(delButton);
+                const editButton = document.createElement('button');
+                editButton.textContent = 'редактировать';
+                editButton.onclick = () => editFilm(i);
 
-                tr.append(tdTitle);
-                tr.append(tdTitleRus);
-                tr.append(tdYear);
-                tr.append(tdActions);
+                const delButton = document.createElement('button');
+                delButton.textContent = 'удалить';
+                delButton.onclick = () => deleteFilm(i, film.title_ru);
 
+                tdActions.append(editButton, delButton);
+                tr.append(tdTitleRus, tdTitle, tdYear, tdActions);
                 tbody.append(tr);
-            }
+            });
         })
-        .catch(function (err) {
-            console.error('Ошибка при загрузке фильмов:', err);
-        });
+        .catch(err => console.error('Ошибка:', err));
 }
 
 function deleteFilm(id, title){
