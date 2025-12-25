@@ -2,8 +2,223 @@
 
 {% block lab %}Лабораторная работа 9{% endblock %}
 
-{% block script %}{% endblock %}
-
 {% block main %}
-    <h1>Поздравления</h1>
+<div class="page">
+  <h1 class="title">Поздравления и подарки 🎁</h1>
+
+  <div class="info">
+    <div class="badge">Осталось неоткрытых коробок: <span id="unopened">{{ unopened_total }}</span></div>
+    <div class="badge">Открыто тобой: <span id="openedCount">{{ session.get('opened_count', 0) }}</span> / 3</div>
+  </div>
+
+  <div id="scene" class="scene">
+    {% for b in boxes %}
+      <img
+        class="box {% if b.id in opened_boxes %}box--opened{% endif %}"
+        src="{{ url_for('static', filename=b.img) }}"
+        alt="gift box"
+        style="top: {{ b.top }}%; left: {{ b.left }}%; width: {{ b.size }}px;"
+        data-box-id="{{ b.id }}"
+        draggable="false"
+      />
+    {% endfor %}
+  </div>
+
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal__card">
+      <div class="modal__header">
+        <div class="modal__title">Твой подарок</div>
+        <button id="closeModal" class="modal__close" type="button">✕</button>
+      </div>
+
+      <div id="modalText" class="modal__text"></div>
+
+      <div class="modal__gift">
+        <img id="giftImg" src="" alt="gift" />
+      </div>
+
+      <button id="okBtn" class="modal__btn" type="button">Спасибо!</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .page {
+    background: #ffffff;
+    min-height: 85vh;
+    padding: 20px 10px 40px;
+  }
+  .title {
+    color: #b00020;
+    text-align: center;
+    margin: 10px 0 14px;
+    letter-spacing: 0.2px;
+  }
+  .info {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .badge {
+    border: 1px solid #b00020;
+    color: #b00020;
+    background: #fff5f6;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+
+  .scene {
+    position: relative;
+    width: min(980px, 96vw);
+    height: min(520px, 62vh);
+    margin: 0 auto;
+    border: 2px dashed #b00020;
+    border-radius: 16px;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  .box {
+    position: absolute;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.12s ease, filter 0.12s ease, opacity 0.12s ease;
+  }
+  .box:hover {
+    transform: scale(1.05);
+  }
+  .box--opened {
+    filter: grayscale(1);
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 9999;
+  }
+  .hidden { display: none; }
+
+  .modal__card {
+    width: min(520px, 96vw);
+    background: #ffffff;
+    border-radius: 16px;
+    border: 2px solid #b00020;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    padding: 14px 14px 16px;
+  }
+  .modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .modal__title {
+    color: #b00020;
+    font-weight: 800;
+    font-size: 18px;
+  }
+  .modal__close {
+    border: 1px solid #b00020;
+    background: #fff5f6;
+    color: #b00020;
+    border-radius: 10px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-weight: 800;
+  }
+  .modal__text {
+    color: #b00020;
+    font-size: 16px;
+    line-height: 1.35;
+    margin: 6px 2px 12px;
+  }
+  .modal__gift {
+    display: flex;
+    justify-content: center;
+    margin: 6px 0 12px;
+  }
+  .modal__gift img {
+    max-width: 280px;
+    max-height: 220px;
+    object-fit: contain;
+  }
+  .modal__btn {
+    width: 100%;
+    border: none;
+    background: #b00020;
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  const openedBoxesFromServer = new Set({{ opened_boxes|tojson }});
+
+  const scene = document.getElementById("scene");
+  const modal = document.getElementById("modal");
+  const modalText = document.getElementById("modalText");
+  const giftImg = document.getElementById("giftImg");
+  const unopenedEl = document.getElementById("unopened");
+  const openedCountEl = document.getElementById("openedCount");
+
+  const closeBtn = document.getElementById("closeModal");
+  const okBtn = document.getElementById("okBtn");
+
+  function openModal(text, giftUrl) {
+    modalText.textContent = text;
+    giftImg.src = giftUrl || "";
+    modal.classList.remove("hidden");
+  }
+
+  function closeModal() {
+    modal.classList.add("hidden");
+  }
+
+  closeBtn.addEventListener("click", closeModal);
+  okBtn.addEventListener("click", closeModal);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  scene.addEventListener("click", async (e) => {
+    const box = e.target.closest(".box");
+    if (!box) return;
+
+    const boxId = Number(box.dataset.boxId);
+
+    const res = await fetch("{{ url_for('lab9.open_box') }}", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({box_id: boxId})
+    });
+
+    const data = await res.json();
+
+    if (typeof data.unopened_total !== "undefined") unopenedEl.textContent = data.unopened_total;
+    if (typeof data.opened_count !== "undefined") openedCountEl.textContent = data.opened_count;
+
+    if (!data.ok) {
+      openModal(data.message || "Не получилось открыть коробку.", "");
+      return;
+    }
+
+    box.classList.add("box--opened");
+    openedBoxesFromServer.add(boxId);
+
+    openModal(data.congrats, "{{ url_for('static', filename='') }}" + data.gift_img);
+  });
+</script>
 {% endblock %}
