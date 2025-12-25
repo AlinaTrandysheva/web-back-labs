@@ -75,3 +75,11 @@ def articles():
 @lab8.route('/lab8/create')
 def create():
     return render_template('lab8/create.html')
+
+@lab8.route('/lab8/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/lab8/')
+
+

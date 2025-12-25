@@ -13,18 +13,22 @@
     <div class="header-menu">
         <a href="/lab8/articles" class="btn">Список статей</a>
         <a href="/lab8/create" class="btn">Создать статью</a>
-        <a href="/lab8/login" class="btn">Войти</a>
-        <a href="/lab8/register" class="btn">Регистрация</a>
+
+        {% if current_user.is_authenticated %}
+            <a href="/lab8/logout" class="btn">Выйти</a>
+        {% else %}
+            <a href="/lab8/login" class="btn">Войти</a>
+            <a href="/lab8/register" class="btn">Регистрация</a>
+        {% endif %}
     </div>
 
     <div class="user">
-    {% if current_user.is_authenticated %}
-        {{ current_user.login }}
-    {% else %}
-        Anonymous
-    {% endif %}
+        {% if current_user.is_authenticated %}
+            {{ current_user.login }}
+        {% else %}
+            Anonymous
+        {% endif %}
     </div>
-
 </header>
 
 </body>
