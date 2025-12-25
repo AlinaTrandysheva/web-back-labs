@@ -1,0 +1,48 @@
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #ffffff;
+    color: #333;
+}
+
+.header {
+    background: pink;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+}
+
+.header-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-right: 30px;
+}
+
+.header-menu {
+    display: flex;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+.btn {
+    background: #ffffff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    border: 1px solid #cfdfe4;
+}
+
+.btn:hover {
+    background: #eef7fa;
+}
+
+.header-user {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.content {
+    padding: 30px;
+}
