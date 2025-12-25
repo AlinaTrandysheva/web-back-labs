@@ -1,12 +1,30 @@
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <title>Создать статью</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='lab8/lab8.css') }}">
-</head>
-<body class="page">
-    <h1>Создать статью</h1>
-    <p><a href="/lab8/">На главную lab8</a></p>
-</body>
-</html>
+{% extends "base.html" %}
+{% block lab %}Лабораторная работа 8{% endblock %}
+{% block main %}
+<h1>Создать статью</h1>
+
+{% if error %}
+<div style="color:red;">{{ error }}</div>
+{% endif %}
+
+<form method="post">
+    <div>
+        <label>Заголовок: <input type="text" name="title"></label>
+    </div>
+
+    <div>
+        <label>Текст статьи:</label><br>
+        <textarea name="article_text" rows="10" cols="60"></textarea>
+    </div>
+
+    <div>
+        <label><input type="checkbox" name="is_public"> Публичная</label>
+    </div>
+
+    <div>
+        <label><input type="checkbox" name="is_favorite"> В избранное</label>
+    </div>
+
+    <button type="submit">Создать</button>
+</form>
+{% endblock %}
