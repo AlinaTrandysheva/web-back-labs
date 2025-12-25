@@ -6,7 +6,6 @@ from flask_login import login_user, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import and_, or_
 
-
 lab8 = Blueprint('lab8', __name__)
 
 @lab8.route('/lab8/')
