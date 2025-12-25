@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify, session
 import random
+from flask_login import current_user, login_required
 
 lab9 = Blueprint("lab9", __name__, url_prefix="/lab9")
 
@@ -42,6 +43,8 @@ CONGRATS = [
     "С праздником! Пусть новый год принесёт много поводов улыбаться!",
 ]
 
+AUTH_ONLY_BOXES = {8, 9}
+
 _BOX_POSITIONS = None
 _OPENED_BOXES = set()
 
@@ -82,9 +85,9 @@ def index():
         "lab9/index.html",
         boxes=_BOX_POSITIONS,
         opened_boxes=list(_OPENED_BOXES),
-        unopened_total=unopened_total
+        unopened_total=unopened_total,
+        auth_only_boxes=list(AUTH_ONLY_BOXES)
     )
-
 
 
 @lab9.route("/open", methods=["POST"])
@@ -116,6 +119,16 @@ def open_box():
             "opened_count": session["opened_count"],
         })
 
+    if box_id in AUTH_ONLY_BOXES and not current_user.is_authenticated:
+        unopened_total = len(BOX_IMAGES) - len(_OPENED_BOXES)
+        return jsonify({
+            "ok": False,
+            "auth_required": True,
+            "message": "Этот подарок доступен только авторизованным пользователям.",
+            "unopened_total": unopened_total,
+            "opened_count": session["opened_count"],
+        })
+
     if session["opened_count"] >= 3:
         unopened_total = len(BOX_IMAGES) - len(_OPENED_BOXES)
         return jsonify({
@@ -138,4 +151,19 @@ def open_box():
         "unopened_total": unopened_total,
         "opened_count": session["opened_count"],
         "box_id": box_id,
+    })
+
+
+@lab9.route("/santa", methods=["POST"])
+@login_required
+def santa():
+    global _OPENED_BOXES
+    _OPENED_BOXES = set()
+    session["opened_count"] = 0
+    unopened_total = len(BOX_IMAGES) - len(_OPENED_BOXES)
+    return jsonify({
+        "ok": True,
+        "message": "Дед Мороз снова наполнил все коробки 🎅",
+        "unopened_total": unopened_total,
+        "opened_count": session["opened_count"],
     })

@@ -11,16 +11,26 @@
     <div class="badge">Открыто тобой: <span id="openedCount">{{ session.get('opened_count', 0) }}</span> / 3</div>
   </div>
 
+  {% if current_user.is_authenticated %}
+    <div class="santa">
+      <button id="santaBtn" type="button" class="santaBtn">🎅 Дед Мороз</button>
+    </div>
+  {% endif %}
+
   <div id="scene" class="scene">
     {% for b in boxes %}
-      <img
-        class="box {% if b.id in opened_boxes %}box--opened{% endif %}"
-        src="{{ url_for('static', filename=b.img) }}"
-        alt="gift box"
-        style="top: {{ b.top }}%; left: {{ b.left }}%; width: {{ b.size }}px;"
-        data-box-id="{{ b.id }}"
-        draggable="false"
-      />
+      <div class="boxWrap" style="top: {{ b.top }}%; left: {{ b.left }}%; width: {{ b.size }}px;">
+        <img
+          class="box {% if b.id in opened_boxes %}box--opened{% endif %}"
+          src="{{ url_for('static', filename=b.img) }}"
+          alt="gift box"
+          data-box-id="{{ b.id }}"
+          draggable="false"
+        />
+        {% if b.id in auth_only_boxes and not current_user.is_authenticated %}
+          <div class="lock">🔒</div>
+        {% endif %}
+      </div>
     {% endfor %}
   </div>
 
@@ -70,6 +80,21 @@
     font-weight: 600;
   }
 
+  .santa {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 14px;
+  }
+  .santaBtn {
+    border: 2px solid #b00020;
+    background: #fff5f6;
+    color: #b00020;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
   .scene {
     position: relative;
     width: min(980px, 96vw);
@@ -81,8 +106,13 @@
     overflow: hidden;
   }
 
-  .box {
+  .boxWrap {
     position: absolute;
+  }
+
+  .box {
+    width: 100%;
+    display: block;
     cursor: pointer;
     user-select: none;
     transition: transform 0.12s ease, filter 0.12s ease, opacity 0.12s ease;
@@ -94,6 +124,19 @@
     filter: grayscale(1);
     opacity: 0.45;
     cursor: not-allowed;
+  }
+
+  .lock {
+    position: absolute;
+    right: -6px;
+    top: -10px;
+    background: #fff5f6;
+    border: 1px solid #b00020;
+    color: #b00020;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-weight: 800;
+    pointer-events: none;
   }
 
   .modal {
@@ -165,8 +208,6 @@
 </style>
 
 <script>
-  const openedBoxesFromServer = new Set({{ opened_boxes|tojson }});
-
   const scene = document.getElementById("scene");
   const modal = document.getElementById("modal");
   const modalText = document.getElementById("modalText");
@@ -194,10 +235,10 @@
   });
 
   scene.addEventListener("click", async (e) => {
-    const box = e.target.closest(".box");
-    if (!box) return;
+    const img = e.target.closest(".box");
+    if (!img) return;
 
-    const boxId = Number(box.dataset.boxId);
+    const boxId = Number(img.dataset.boxId);
 
     const res = await fetch("{{ url_for('lab9.open_box') }}", {
       method: "POST",
@@ -215,10 +256,27 @@
       return;
     }
 
-    box.classList.add("box--opened");
-    openedBoxesFromServer.add(boxId);
-
+    img.classList.add("box--opened");
     openModal(data.congrats, "{{ url_for('static', filename='') }}" + data.gift_img);
   });
+
+  const santaBtn = document.getElementById("santaBtn");
+  if (santaBtn) {
+    santaBtn.addEventListener("click", async () => {
+      const res = await fetch("{{ url_for('lab9.santa') }}", { method: "POST" });
+      const data = await res.json();
+
+      if (typeof data.unopened_total !== "undefined") unopenedEl.textContent = data.unopened_total;
+      if (typeof data.opened_count !== "undefined") openedCountEl.textContent = data.opened_count;
+
+      if (!data.ok) {
+        openModal(data.message || "Не удалось выполнить действие.", "");
+        return;
+      }
+
+      document.querySelectorAll(".box").forEach(b => b.classList.remove("box--opened"));
+      openModal(data.message, "");
+    });
+  }
 </script>
 {% endblock %}
