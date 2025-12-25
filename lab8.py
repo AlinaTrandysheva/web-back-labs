@@ -2,17 +2,40 @@ from flask import Blueprint, url_for, request, redirect, abort, render_template
 from werkzeug.security import generate_password_hash
 from db import db
 from db.models import users, articles
+from flask_login import login_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 
 lab8 = Blueprint('lab8', __name__)
 
 @lab8.route('/lab8/')
 def index():
-    username = 'anonymous'
-    return render_template('lab8/index.html', username=username)
+    return render_template('lab8/index.html')
 
-@lab8.route('/lab8/login')
+@lab8.route('/lab8/login', methods=['GET', 'POST'])
 def login():
-    return render_template('lab8/login.html')
+    if request.method == 'GET':
+        return render_template('lab8/login.html')
+
+    login_form = request.form.get('login')
+    password_form = request.form.get('password')
+
+    if not login_form or not password_form:
+        return render_template(
+            'lab8/login.html',
+            error='Логин и пароль не должны быть пустыми'
+        )
+
+    user = users.query.filter_by(login=login_form).first()
+
+    if user and check_password_hash(user.password, password_form):
+        login_user(user)   
+        return redirect('/lab8/')
+
+    return render_template(
+        'lab8/login.html',
+        error='Неверный логин или пароль'
+    )
+
 
 @lab8.route('/lab8/register/', methods=['GET', 'POST'])
 def register():
@@ -45,6 +68,7 @@ def register():
 
 
 @lab8.route('/lab8/articles')
+@login_required
 def articles():
     return render_template('lab8/articles.html')
 

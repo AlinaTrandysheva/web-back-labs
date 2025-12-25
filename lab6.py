@@ -1,10 +1,8 @@
 from flask import Blueprint, render_template, request, session
+from lab5 import db_connect, db_close
 
 lab6 = Blueprint('lab6', __name__)
 
-offices = []
-for i in range(1,11):
-    offices.append({"number": i, "tenant": "", "price": 1000})
 
 @lab6.route('/lab6/')
 def main():
@@ -14,20 +12,35 @@ def main():
 def api():
     data = request.json
     id = data['id']
+    
+    conn, cur = db_connect()
+    cur.execute("SELECT number, tenant, price FROM offices ORDER BY number;")
+    rows = cur.fetchall()
+
+    offices = []
+    for row in rows:
+        offices.append({
+            'number': row['number'],
+            'tenant': row['tenant'] or '',
+            'price': row['price']
+        })
+    
     if data['method'] == 'info':
+        db_close(conn, cur)
         return {
             'jsonrpc': '2.0',
             'result': offices,
             'id': id
         }
-    
+
     login = session.get('login')
     if not login:
+        db_close(conn, cur)
         return {
             'jsonrpc': '2.0',
             'error': {
                 'code': 1,
-                'message': 'Unauthorized'
+                'message': 'Вы не авторизованы'
             },
             'id': id
         }
@@ -38,43 +51,28 @@ def api():
             if office['number'] == office_number:
 
                 if office['tenant']:
+                    db_close(conn, cur)
                     return {
                         'jsonrpc': '2.0',
                         'error': {
                             'code': 2,
-                            'message': 'Office already booked'
+                            'message': 'Офис уже арендуется'
                         },
                         'id': id
                     }
 
                 office['tenant'] = login
+                cur.execute(
+                    "UPDATE offices SET tenant = %s WHERE number = %s;",
+                    (login, office_number)
+                )
+                db_close(conn, cur)
                 return {
                     'jsonrpc': '2.0',
                     'result': 'success',
                     'id': id
                 }
     
-    if data['method'] == 'booking':
-        office_number = data['params']
-        for office in offices:
-            if office['number'] == office_number:
-
-                if office['tenant']:
-                    return {
-                        'jsonrpc': '2.0',
-                        'error': {
-                            'code': 2,
-                            'message': 'Офис уже арендован'
-                        },
-                        'id': id
-                    }
-                
-                office['tenant'] = login
-                return {
-                    'jsonrpc': '2.0',
-                    'result': 'success',
-                    'id': id
-                }
     
     if data['method'] == 'cancellation':
         office_number = data['params']
@@ -82,6 +80,7 @@ def api():
             if office['number'] == office_number:
 
                 if not office['tenant']:
+                    db_close(conn, cur)
                     return {
                         'jsonrpc': '2.0',
                         'error': {
@@ -92,6 +91,7 @@ def api():
                     }
             
                 if office['tenant'] != login:
+                    db_close(conn, cur)
                     return {
                         'jsonrpc': '2.0',
                         'error': {
@@ -102,18 +102,23 @@ def api():
                     }
             
                 office['tenant'] = ''
+                cur.execute(
+                    "UPDATE offices SET tenant = '' WHERE number = %s;",
+                    (office_number,)
+                )
+                db_close(conn, cur)
                 return {
                     'jsonrpc': '2.0',
-                    'result': 'успех',
+                    'result': 'success',
                     'id': id
-                }       
+                }    
 
+    db_close(conn, cur)
     return {
         'jsonrpc': '2.0',
-        'error': {      
+        'error': {
             'code': -32601,
-            'message': 'Method not found'
+            'message': 'Метод не найден'
         },
         'id': id
     }
-

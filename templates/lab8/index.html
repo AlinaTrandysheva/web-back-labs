@@ -17,7 +17,14 @@
         <a href="/lab8/register" class="btn">Регистрация</a>
     </div>
 
-    <div class="header-user">Anonymous</div>
+    <div class="user">
+    {% if current_user.is_authenticated %}
+        {{ current_user.login }}
+    {% else %}
+        Anonymous
+    {% endif %}
+    </div>
+
 </header>
 
 </body>
